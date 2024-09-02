@@ -1,0 +1,32 @@
+# Rutas de la Aplicación - CRUD
+
+## Bookings
+- GET /bookings               -> Listar todas las reservas (Index)
+- GET /bookings/:id           -> Detalle de una reserva específica (Show)
+- GET /bookings/new           -> Página para crear una nueva reserva (New)
+- POST /bookings              -> Crear una nueva reserva (Create)
+- GET /bookings/:id/edit      -> Página para editar una reserva específica (Edit)
+- PUT /bookings/:id           -> Actualizar una reserva existente (Update)
+- DELETE /bookings/:id        -> Eliminar una reserva específica (Delete)
+
+## Rooms
+- GET /rooms                  -> Listar todas las habitaciones (Index)
+- GET /rooms/:id              -> Detalle de una habitación específica (Show)
+- GET /rooms/new              -> Página para crear una nueva habitación (New)
+- POST /rooms                 -> Crear una nueva habitación (Create)
+- GET /rooms/:id/edit         -> Página para editar una habitación específica (Edit)
+- PUT /rooms/:id              -> Actualizar una habitación existente (Update)
+- DELETE /rooms/:id           -> Eliminar una habitación específica (Delete)
+
+## Users
+- GET /users                  -> Listar todos los usuarios (Index)
+- GET /users/:id              -> Detalle de un usuario específico (Show)
+- GET /users/new              -> Página para crear un nuevo usuario (New)
+- POST /users                 -> Crear un nuevo usuario (Create)
+- GET /users/:id/edit         -> Página para editar un usuario específico (Edit)
+- PUT /users/:id              -> Actualizar un usuario existente (Update)
+- DELETE /users/:id           -> Eliminar un usuario específico (Delete)
+
+## Contact
+- GET /contact                -> Página de contacto (Show)
+- POST /contact/submit        -> Enviar el formulario de contacto (Create)
