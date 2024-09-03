@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar{
+    background-color: lightgray;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid gray;
+    width: 100%;
+    max-width: auto;
+}
+
+.lateral{
+    box-shadow: 2px 0 8px black;
+    padding-left: 1rem;
+    ul{
+        list-style: none;
+        li{
+            display: flex;
+            flex-direction: row;
+            padding-bottom: 1rem;
+            a{
+                text-decoration: none;
+                
+            }
+        }
+    }
+
+}
