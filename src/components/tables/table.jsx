@@ -2,12 +2,11 @@
     import styled from 'styled-components';
 
     const TableWrapper = styled.div`
-    width: 100%;
-    overflow-x: auto;
+      width:auto;
     margin-bottom: 20px;
   
     table {
-      width: 100%;
+      width:auto;
       border-collapse: collapse;
       font-size: 0.9rem;
     }
@@ -88,12 +87,14 @@
       background-color: #e0e0e0;
     }
   `;
-  
   const Tabla = ({ cols, data }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [recordsPerPage] = useState(10);
     const [archivedData, setArchivedData] = useState([]);
   
+    const totalRecords = data.length;
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = data.slice(indexOfFirstRecord, indexOfLastRecord);
@@ -103,6 +104,32 @@
     const handleArchive = (id) => {
       const archiveRecord = data.find((record) => record.id === id);
       setArchivedData([...archivedData, archiveRecord]);
+    };
+  
+    const renderPageNumbers = () => {
+      const pageNumbers = [];
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, currentPage + 2);
+  
+      if (currentPage > 3) {
+        pageNumbers.push(1);
+        if (currentPage > 4) {
+          pageNumbers.push('...');
+        }
+      }
+  
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+  
+      if (currentPage < totalPages - 2) {
+        if (currentPage < totalPages - 3) {
+          pageNumbers.push('...');
+        }
+        pageNumbers.push(totalPages);
+      }
+  
+      return pageNumbers;
     };
   
     return (
@@ -137,11 +164,45 @@
         </TableWrapper>
   
         <Pagination>
-          {Array.from({ length: Math.ceil(data.length / recordsPerPage) }, (_, i) => (
-            <button key={i} onClick={() => paginate(i + 1)} disabled={currentPage === i + 1}>
-              {i + 1}
+          <div className="pagination-controls">
+            <button 
+              onClick={() => paginate(1)} 
+              disabled={currentPage === 1}
+            >
+              &laquo; First
             </button>
-          ))}
+            <button 
+              onClick={() => paginate(currentPage - 1)} 
+              disabled={currentPage === 1}
+            >
+              &lsaquo; Prev
+            </button>
+            {renderPageNumbers().map((number, index) =>
+              number === '...' ? (
+                <span key={index} style={{ margin: '0 0.5rem' }}>...</span>
+              ) : (
+                <button 
+                  key={index} 
+                  onClick={() => paginate(number)} 
+                  disabled={number === currentPage}
+                >
+                  {number}
+                </button>
+              )
+            )}
+            <button 
+              onClick={() => paginate(currentPage + 1)} 
+              disabled={currentPage === totalPages}
+            >
+              Next &rsaquo;
+            </button>
+            <button 
+              onClick={() => paginate(totalPages)} 
+              disabled={currentPage === totalPages}
+            >
+              Last &raquo;
+            </button>
+          </div>
         </Pagination>
       </>
     );

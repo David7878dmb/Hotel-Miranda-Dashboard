@@ -44,7 +44,7 @@ export const Concierge = () => {
   
     const tableData = allContacts.map(contact => ({
       ...contact,
-      comment: <CommentText>{`Comentario predeterminado: patata patata...`}</CommentText>, // Añade comentario dinámico
+      comment: <CommentText>{`AAAAAAAAAAAAAAAAAAAAAAAAAAAA`}</CommentText>, // Añade comentario dinámico
       action: (
         <button onClick={() => handleArchive(contact.id)}>
           Archive
