@@ -154,9 +154,6 @@
                   {cols.map((col, colIndex) => (
                     <td key={colIndex}>{row[col.accessor]}</td>
                   ))}
-                  <td>
-                    <button onClick={() => handleArchive(row.id)}>ARCHIVE</button>
-                  </td>
                 </tr>
               ))}
             </tbody>

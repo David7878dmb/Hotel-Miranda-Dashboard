@@ -46,7 +46,7 @@ export const Concierge = () => {
       ...contact,
       comment: <CommentText>{`AAAAAAAAAAAAAAAAAAAAAAAAAAAA`}</CommentText>, // Añade comentario dinámico
       action: (
-        <button onClick={() => handleArchive(contact.id)}>
+        <button>
           Archive
         </button>
       ),
