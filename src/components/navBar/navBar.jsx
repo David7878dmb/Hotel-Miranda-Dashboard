@@ -4,6 +4,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import styled from "styled-components";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../login/authContext';
 
 const Parrafo = styled.span`
     padding-left: 1rem;
@@ -24,15 +25,12 @@ const Row = styled.div`
 
 
 const NavBar = () => {
-
+    const { logout } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Eliminar autenticación de localStorage
-        localStorage.removeItem('auth');
-        // Redirigir al login
-        navigate('/login');
-    };
+        logout(navigate);
+      };
 
 
     return(

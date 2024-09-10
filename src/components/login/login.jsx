@@ -1,13 +1,17 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './authContext';
 
 function Login({ onLogin }) {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-    onLogin(username, password, navigate);
+
+
+    login(username, password, navigate);
   };
 
   return (

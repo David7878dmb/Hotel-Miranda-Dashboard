@@ -8,43 +8,32 @@ import { Dashboard } from './pages/dashboard';
 import { Guest } from './pages/guest';
 import { Concierge } from './pages/concierge';
 import Login from './login/login';
+import { AuthProvider, useAuth } from './login/authContext';
 import '../style/App.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('auth') === 'true';
-  });
-
-  const handleLogin = (username, password, navigate) => {
-    const testingUser = { 
-      username: 'admin', 
-      passwordHash: bcrypt.hashSync('1234', 10)
-    };
-
-    if (username === testingUser.username && bcrypt.compareSync(password, testingUser.passwordHash)) {
-      setIsAuthenticated(true);
-      localStorage.setItem('auth', 'true');
-      navigate('/');
-    } else {
-      alert('Usuario o contraseña incorrectos');
-    }
-  };
-
+  const { isAuthenticated } = useAuth(); // Accedemos al estado de autenticación
 
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<Login onLogin={handleLogin} />} />
-        <Route path='/' element={isAuthenticated ? <Home /> : <Login onLogin={handleLogin} />} />
-        <Route path='/booking' element={isAuthenticated ? <Booking /> : <Login onLogin={handleLogin} />} />
-        <Route path='/rooms' element={isAuthenticated ? <Rooms /> : <Login onLogin={handleLogin} />} />
-        <Route path='/dashboard' element={isAuthenticated ? <Dashboard /> : <Login onLogin={handleLogin} />} />
-        <Route path='/guest' element={isAuthenticated ? <Guest /> : <Login onLogin={handleLogin} />} />
-        <Route path='/concierge' element={isAuthenticated ? <Concierge /> : <Login onLogin={handleLogin} />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/' element={isAuthenticated ? <Home /> : <Login />} />
+        <Route path='/booking' element={isAuthenticated ? <Booking /> : <Login />} />
+        <Route path='/rooms' element={isAuthenticated ? <Rooms /> : <Login />} />
+        <Route path='/dashboard' element={isAuthenticated ? <Dashboard /> : <Login />} />
+        <Route path='/guest' element={isAuthenticated ? <Guest /> : <Login />} />
+        <Route path='/concierge' element={isAuthenticated ? <Concierge /> : <Login />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default function AppWithAuthProvider() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
