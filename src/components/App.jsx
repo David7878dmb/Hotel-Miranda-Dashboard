@@ -1,6 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useState } from 'react';
-import bcrypt from 'bcryptjs'; 
 import { Home } from './pages/home';
 import { Booking } from './pages/booking';
 import { Rooms } from './pages/rooms';
@@ -12,7 +10,7 @@ import { AuthProvider, useAuth } from './login/authContext';
 import '../style/App.css';
 
 function App() {
-  const { isAuthenticated } = useAuth(); // Accedemos al estado de autenticación
+  const { isAuthenticated } = useAuth(); 
 
 
   return (
