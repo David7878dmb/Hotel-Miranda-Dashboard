@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllThunk } from '../../features/bookings/bookingThunk';
+import { promiseStatus } from '../../utils/promises';
 import Container from "../container/container";
 import LateralMenu from "../lateralMenu/lateralMenu";
 import styled from 'styled-components';
 import NavBar from "../navBar/navBar";
 import Table from "../tables/table";
-import { fetchBookings, archiveBooking } from '../../features/bookings/bookingsSlice';
-import { selectAllBookings, selectBookingStatus } from '../../features/bookings/bookingSelector';
 
 const Title = styled.h1``;
 const CommentText = styled.p`
@@ -16,21 +16,29 @@ const CommentText = styled.p`
   white-space: pre-line;
 `;
 
-export const Booking = () => {
+const Booking = () => {
   const dispatch = useDispatch();
-  const bookings = useSelector(selectAllBookings);
-  const bookingStatus = useSelector(selectBookingStatus);
+
+  // Selecciona los datos desde el estado de Redux
+  const { bookings, status, error } = useSelector(state => state.booking);
 
   useEffect(() => {
-    if (bookingStatus === 'idle') {
-      dispatch(fetchBookings());
+    if (status === promiseStatus.IDLE) {
+      dispatch(getAllThunk());
     }
-  }, [bookingStatus, dispatch]);
+  }, [dispatch, status]);
 
-  const handleArchive = (id) => {
-    dispatch(archiveBooking(id));
-  };
+  // Mostrar loading mientras los datos se cargan
+  if (status === promiseStatus.PENDING) {
+    return <p>Loading...</p>;
+  }
 
+  // Mostrar un mensaje de error si la carga falla
+  if (status === promiseStatus.REJECTED) {
+    return <p>Error: {error}</p>;
+  }
+
+  // Definir columnas para la tabla
   const columns = [
     { header: 'Date', accessor: 'date' },
     { header: 'ID', accessor: 'id' },
@@ -41,17 +49,16 @@ export const Booking = () => {
     { header: 'Action', accessor: 'action' },
   ];
 
-  const tableData = bookings
-    .filter(contact => !contact.archived)
-    .map(contact => ({
-      ...contact,
-      comment: <CommentText>{`aaaaaaaaaaaaaaaaaaaaaaaa`}</CommentText>,
-      action: (
-        <button onClick={() => handleArchive(contact.id)}>
-          Archive
-        </button>
-      ),
-    }));
+  // Mapea las bookings para generar los datos de la tabla
+  const tableData = bookings.map(booking => ({
+    ...booking,
+    comment: <span>{`Hardcoded comment`}</span>, // Comentario hardcodeado
+    action: (
+      <button onClick={() => console.log(`Booking con ID ${booking.id} archivada`)}>
+        Archive
+      </button>
+    ),
+  }));
 
   return (
     <Container>
@@ -60,13 +67,12 @@ export const Booking = () => {
         <NavBar />
         <section>
           <Title>Concierge</Title>
-          {bookingStatus === 'loading' ? (
-            <p>Loading...</p>
-          ) : (
-            <Table cols={columns} data={tableData} />
-          )}
+          {/* Renderiza la tabla si el estado es "fulfilled" */}
+          <Table cols={columns} data={tableData} />
         </section>
       </div>
     </Container>
   );
 };
+
+export default Booking;

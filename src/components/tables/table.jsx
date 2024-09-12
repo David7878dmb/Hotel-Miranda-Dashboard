@@ -101,10 +101,10 @@
   
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
   
-    const handleArchive = (id) => {
+   /*const handleArchive = (id) => {
       const archiveRecord = data.find((record) => record.id === id);
       setArchivedData([...archivedData, archiveRecord]);
-    };
+    };*/
   
     const renderPageNumbers = () => {
       const pageNumbers = [];
