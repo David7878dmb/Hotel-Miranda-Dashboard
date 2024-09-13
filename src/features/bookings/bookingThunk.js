@@ -1,14 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import data from '../../components/json/MOCK_DATA.json'; // Asegúrate de que este es el path correcto
+import data from '../../components/json/MOCK_DATA.json';
 
-// Función delay para simular una respuesta asíncrona con retraso
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Thunk para obtener todas las bookings
 export const getAllThunk = createAsyncThunk(
     'booking/getAll',
     async () => {
-        await delay(1000); // Simulamos un delay de 1 segundo
+        await delay(2000);
         return data;
     }
 );
@@ -17,7 +16,7 @@ export const getAllThunk = createAsyncThunk(
 export const getByIdThunk = createAsyncThunk(
     'booking/getById',
     async (id) => {
-        await delay(1000); // Simulamos un delay de 1 segundo
+        await delay(2000);
         return data.find(booking => booking.id === id) || null;
     }
 );
@@ -26,7 +25,7 @@ export const getByIdThunk = createAsyncThunk(
 export const createThunk = createAsyncThunk(
     'booking/create',
     async (newBooking) => {
-        await delay(1000); // Simulamos un delay de 1 segundo
+        await delay(2000);
         alert(`Booking creada: ${JSON.stringify(newBooking)}`);
         return newBooking;
     }
@@ -36,7 +35,7 @@ export const createThunk = createAsyncThunk(
 export const editThunk = createAsyncThunk(
     'booking/edit',
     async ({ id, updatedBooking }) => {
-        await delay(1000); // Simulamos un delay de 1 segundo
+        await delay(2000); 
         const oldBooking = data.find(booking => booking.id === id) || null;
         alert(`Booking modificada: ${JSON.stringify(oldBooking)} -> ${JSON.stringify(updatedBooking)}`);
         return updatedBooking;
@@ -47,7 +46,7 @@ export const editThunk = createAsyncThunk(
 export const removeThunk = createAsyncThunk(
     'booking/remove',
     async (id) => {
-        await delay(1000); // Simulamos un delay de 1 segundo
+        await delay(2000);
         const deletedBooking = data.find(booking => booking.id === id) || null;
         alert(`Booking eliminada: ${deletedBooking}`);
         return id;

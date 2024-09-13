@@ -52,7 +52,7 @@ const Booking = () => {
   // Mapea las bookings para generar los datos de la tabla
   const tableData = bookings.map(booking => ({
     ...booking,
-    comment: <span>{`Hardcoded comment`}</span>, // Comentario hardcodeado
+    comment: <span>{`Hardcoded comment`}</span>,
     action: (
       <button onClick={() => console.log(`Booking con ID ${booking.id} archivada`)}>
         Archive
@@ -67,7 +67,6 @@ const Booking = () => {
         <NavBar />
         <section>
           <Title>Concierge</Title>
-          {/* Renderiza la tabla si el estado es "fulfilled" */}
           <Table cols={columns} data={tableData} />
         </section>
       </div>

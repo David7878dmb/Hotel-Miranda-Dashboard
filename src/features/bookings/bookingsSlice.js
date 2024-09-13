@@ -3,7 +3,7 @@ import { getAllThunk, getByIdThunk, createThunk, editThunk, removeThunk } from '
 import { changeStatus, pending, rejected, promiseStatus } from '../../utils/promises';
 
 const initialState = {
-    bookings: [],  // Cambié 'guests' a 'bookings'
+    bookings: [],
     booking: null,
     status: promiseStatus.IDLE,
     error: null
@@ -12,7 +12,7 @@ const initialState = {
 const bookingSlice = createSlice({
     name: 'booking',
     initialState,
-    reducers: {}, // Podrías agregar reducers adicionales aquí si los necesitas
+    reducers: {},
     extraReducers: (builder) => {
         builder
             // Obtener todas las bookings
