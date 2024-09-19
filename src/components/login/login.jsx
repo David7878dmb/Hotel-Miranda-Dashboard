@@ -16,9 +16,9 @@ function Login({ onLogin }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="username" placeholder="Username" />
-      <input name="password" type="password" placeholder="Password" />
-      <button type="submit">Login</button>
+      <input data-cy="username" name="username" placeholder="Username" />
+      <input data-cy="password" name="password" type="password" placeholder="Password" />
+      <button data-cy="login" type="submit">Login</button>
     </form>
   );
 }
