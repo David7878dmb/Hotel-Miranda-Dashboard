@@ -48,7 +48,7 @@ const LateralMenu = () => {
                 </li>
 
                 <li>
-                    <Link to="/concierge"><HiOutlinePuzzle /><Parrafo>Concierge</Parrafo></Link>
+                    <Link to="/users"><HiOutlinePuzzle /><Parrafo>Users</Parrafo></Link>
                 </li>
 
 

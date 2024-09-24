@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home } from './pages/home';
 import Booking from './pages/booking';
-import { Rooms } from './pages/rooms';
+import RoomList from './pages/rooms';
 import { Dashboard } from './pages/dashboard';
 import Contact from './pages/guest';
 import { Concierge } from './pages/concierge';
@@ -19,10 +19,10 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/' element={isAuthenticated ? <Home /> : <Login />} />
         <Route path='/booking' element={isAuthenticated ? <Booking /> : <Login />} />
-        <Route path='/rooms' element={isAuthenticated ? <Rooms /> : <Login />} />
+        <Route path='/rooms' element={isAuthenticated ? <RoomList /> : <Login />} />
         <Route path='/dashboard' element={isAuthenticated ? <Dashboard /> : <Login />} />
         <Route path='/contact' element={isAuthenticated ? <Contact /> : <Login />} />
-        <Route path='/concierge' element={isAuthenticated ? <Concierge /> : <Login />} />
+        <Route path='/users' element={isAuthenticated ? <Concierge /> : <Login />} />
       </Routes>
     </BrowserRouter>
   );
