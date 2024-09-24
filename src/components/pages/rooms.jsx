@@ -8,6 +8,12 @@ import styled from 'styled-components';
 import NavBar from "../navBar/navBar";
 import Table from "../tables/table";
 
+const StyledRow = styled.tr`
+  background-color: ${(props) => 
+    props.status === 'Available' ? 'green' : 'red'};
+`;
+
+
 const Title = styled.h1``;
 
 const RoomList = () => {
@@ -42,7 +48,11 @@ const RoomList = () => {
   const tableData = rooms.map(room => ({
     ...room,
     picture: <img src={room.picture} alt="Room" width={80} />,
-    offerPrice: room.discount ? `$${(parseFloat(room.rate.replace('$', '')) * (1 - room.discount / 100)).toFixed(2)}` : room.rate,
+    offerPrice: room.discount 
+      ? `$${(parseFloat(room.rate.replace('$', '')) * (1 - room.discount / 100)).toFixed(2)}`
+      : room.rate,
+    status: room.status,
+    rowStyle: <StyledRow status={room.status}></StyledRow>,
   }));
 
   return (
@@ -52,7 +62,7 @@ const RoomList = () => {
         <NavBar />
         <section>
           <Title>Room List</Title>
-          <Table cols={columns} data={tableData} />
+          <Table cols={columns} data={tableData} rowRenderer={(row) => <StyledRow status={row.status}>{row.children}</StyledRow>} />
         </section>
       </div>
     </Container>

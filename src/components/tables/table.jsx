@@ -134,11 +134,7 @@
   
     return (
       <>
-        <Tabs>
-          <button>All Contacts</button>
-          <button>Archived</button>
-        </Tabs>
-  
+
         <TableWrapper>
           <table>
             <thead>
