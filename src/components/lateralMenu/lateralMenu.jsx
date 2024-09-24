@@ -44,7 +44,7 @@ const LateralMenu = () => {
 
 
                 <li>
-                    <Link to="/guest"><MdOutlinePerson /><Parrafo>Guest</Parrafo></Link>
+                    <Link to="/contact"><MdOutlinePerson /><Parrafo>Contact</Parrafo></Link>
                 </li>
 
                 <li>
