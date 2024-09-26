@@ -1,12 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsersThunk } from '../../features/users/usersThunk';
+// @ts-ignore
 import { promiseStatus } from '../../utils/promises';
+// @ts-ignore
 import Container from "../container/container";
+// @ts-ignore
 import LateralMenu from "../lateralMenu/lateralMenu";
+// @ts-ignore
 import styled from 'styled-components';
+// @ts-ignore
 import NavBar from "../navBar/navBar";
+// @ts-ignore
 import Table from "../tables/table";
+import { AppDispatch, RootState } from '../../app/store';
+
+interface Users {
+    id:number;
+    name:string;
+    picture:string;
+    joined:Date;
+    "job-desk":string;
+    schedule:string[];
+    contact:string;
+    status:string;
+}
+
+interface UsersState{
+    users:Users[];
+    status:string;
+    error: string | null;
+}
 
 const Title = styled.h1``;
 
@@ -44,11 +68,11 @@ const UserDate = styled.p`
   color: #888;
 `;
 
-const Users = () => {
-  const dispatch = useDispatch();
-  const { users, status, error } = useSelector(state => state.users);
+const Users: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const { users, status, error } = useSelector((state: RootState) => state.users as UsersState);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState<Users[]>([]);
 
   useEffect(() => {
     if (status === promiseStatus.IDLE) {
@@ -83,7 +107,7 @@ const Users = () => {
   ];
 
   // Datos de la tabla
-  const tableData = filteredUsers.map(user => ({
+  const tableData = filteredUsers.map((user: Users) => ({
     nameDetails: (
       <div>
         <UserCard>

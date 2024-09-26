@@ -1,8 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
+// @ts-ignore
 import { getAllUsersThunk } from './usersThunk';
+// @ts-ignore
 import { changeStatus, pending, rejected, promiseStatus } from '../../utils/promises';
 
-const initialState = {
+interface Users {
+    id:number;
+    name:string;
+    picture:string;
+    joined:Date;
+    "job-desk":string;
+    schedule:string[];
+    contact:string;
+    status:string;
+}
+
+interface UsersState{
+    users:Users[];
+    status:string;
+    error: string | null;
+}
+
+const initialState: UsersState = {
   users: [],
   status: promiseStatus.IDLE,
   error: null
