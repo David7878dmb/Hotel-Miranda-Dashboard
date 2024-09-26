@@ -87,7 +87,7 @@ const Users = () => {
     nameDetails: (
       <div>
         <UserCard>
-          <UserPhoto src={user.picture} alt={user.name} style={{ width: '50px', borderRadius: '50%', marginRight: '10px' }} />
+          <UserPhoto src={user.picture} alt={user.name} style={{ width: '50px', marginRight: '10px' }} />
           <UserInfo>
             <UserName>{user.name} </UserName> 
             <UserID>ID: {user.id} </UserID>
