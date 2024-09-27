@@ -1,13 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+// @ts-ignore
 import data from '../../components/json/MOCK_DATA.json';
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+interface Contact {
+    id: number;
+    name: string;
+    date: string;
+    email: string;
+    phone: string;
+    value: number;
+}
+
+const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 const delaytime = 1500;
 
 // Thunk para obtener todos los contactos
 export const getAllThunk = createAsyncThunk(
     'contact/getAll',
-    async () => {
+    async (): Promise<Contact[]> => {
         await delay(delaytime);
         return data;
     }
@@ -16,16 +26,16 @@ export const getAllThunk = createAsyncThunk(
 // Thunk para obtener contacto por ID
 export const getByIdThunk = createAsyncThunk(
     'contact/getById',
-    async (id) => {
+    async (id: number): Promise<Contact | null> => { 
         await delay(delaytime);
-        return data.find(contact => contact.id === id) || null;
+        return data.find((contact: Contact) => contact.id === id) || null;
     }
 );
 
 // Thunk para crear un nuevo contacto
 export const createThunk = createAsyncThunk(
     'contact/create',
-    async (newContact) => {
+    async (newContact: Contact): Promise<Contact> => {
         await delay(delaytime);
         alert(`Contacto creado: ${JSON.stringify(newContact)}`);
         return newContact;
@@ -35,9 +45,9 @@ export const createThunk = createAsyncThunk(
 // Thunk para editar un contacto
 export const editThunk = createAsyncThunk(
     'contact/edit', 
-    async ({ id, updatedContact }) => { 
+    async ({ id, updatedContact }: { id: number, updatedContact: Contact }): Promise<Contact> => { 
         await delay(delaytime);
-        const oldContact = data.find(contact => contact.id === id) || null; 
+        const oldContact = data.find((contact: Contact) => contact.id === id) || null; 
         alert(`Contacto modificado: ${JSON.stringify(oldContact)} -> ${JSON.stringify(updatedContact)}`);
         return updatedContact;
     }
@@ -46,9 +56,9 @@ export const editThunk = createAsyncThunk(
 // Thunk para eliminar un contacto
 export const removeThunk = createAsyncThunk(
     'contact/remove',
-    async (id) => {
+    async (id: number): Promise<number> => {
         await delay(delaytime);
-        const deletedContact = data.find(contact => contact.id === id) || null;
+        const deletedContact = data.find((contact: Contact) => contact.id === id) || null;
         alert(`Contacto eliminado: ${deletedContact}`);
         return id;
     }

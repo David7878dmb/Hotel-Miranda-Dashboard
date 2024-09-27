@@ -1,8 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getAllThunk, getByIdThunk, createThunk, editThunk, removeThunk } from './contactThunk';
+// @ts-ignore
 import { changeStatus, pending, rejected, promiseStatus } from '../../utils/promises';
 
-const initialState = {
+interface Contact {
+    id: number;
+    name: string;
+    date: string;
+    email: string;
+    phone: string;
+    value: number;
+}
+
+interface ContactState  {
+    contacts: Contact[];
+    contact: Contact | null;
+    status: string;
+    error: string | null;
+}
+
+const initialState : ContactState = {
     contacts: [],
     contact: null,
     status: promiseStatus.IDLE,

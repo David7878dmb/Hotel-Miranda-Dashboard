@@ -1,20 +1,42 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllThunk } from '../../features/contact/contactThunk';
+// @ts-ignore
 import { promiseStatus } from '../../utils/promises';
+// @ts-ignore
 import Container from "../container/container";
+// @ts-ignore
 import LateralMenu from "../lateralMenu/lateralMenu";
 import styled from 'styled-components';
+// @ts-ignore
 import NavBar from "../navBar/navBar";
+// @ts-ignore
 import Table from "../tables/table";
+import { AppDispatch, RootState } from '../../app/store';
+
+interface Contact {
+    id: number;
+    name: string;
+    date: string;
+    email: string;
+    phone: string;
+    value: number;
+}
+
+interface ContactState  {
+    contacts: Contact[];
+    contact: Contact | null;
+    status: string;
+    error: string | null;
+}
 
 const Title = styled.h1``;
 
-const Contact = () => { // Cambiado a 'Contact'
-  const dispatch = useDispatch();
+const Contact: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
 
   // Selecciona los datos desde el estado de Redux
-  const { contacts, status, error } = useSelector(state => state.contact);
+  const { contacts, status, error } = useSelector((state: RootState) => state.contact);
 
   useEffect(() => {
     if (status === promiseStatus.IDLE) {
@@ -44,7 +66,7 @@ const Contact = () => { // Cambiado a 'Contact'
   ];
 
   // Mapea los contactos para generar los datos de la tabla
-  const tableData = contacts.map(contact => ({ 
+  const tableData = contacts.map((contact: Contact) => ({ 
     ...contact,
     comment: <span>{`Hardcoded comment`}</span>,
     action: (
@@ -60,7 +82,7 @@ const Contact = () => { // Cambiado a 'Contact'
       <div>
         <NavBar />
         <section>
-          <Title>Guest</Title>
+          <Title>AAAAAAAAAAAAaa</Title>
           <Table cols={columns} data={tableData} />
         </section>
       </div>
