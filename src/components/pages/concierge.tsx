@@ -1,44 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsersThunk } from '../../features/users/usersThunk';
-// @ts-ignore
+//@ts-ignore
 import { promiseStatus } from '../../utils/promises';
-// @ts-ignore
+//@ts-ignore
 import Container from "../container/container";
-// @ts-ignore
+//@ts-ignore
 import LateralMenu from "../lateralMenu/lateralMenu";
-// @ts-ignore
+//@ts-ignore
 import styled from 'styled-components';
-// @ts-ignore
+//@ts-ignore
 import NavBar from "../navBar/navBar";
-// @ts-ignore
+//@ts-ignore
 import Table from "../tables/table";
 import { AppDispatch, RootState } from '../../app/store';
 
 interface Users {
-    id:number;
-    name:string;
-    picture:string;
-    joined:Date;
-    "job-desk":string;
-    schedule:string[];
-    contact:string;
-    status:string;
+    _id: string; // Cambiado a string para el id de MongoDB
+    id: number;
+    username: string; // Cambiado a username
+    picture: string;
+    joined: string; // Cambiado a string para facilitar la conversión a fecha
+    "job-desk": string;
+    schedule: string[];
+    contact: string;
+    status: string;
 }
 
-interface UsersState{
-    users:Users[];
-    status:string;
+interface UsersState {
+    users: Users[];
+    status: string;
     error: string | null;
 }
 
 const Title = styled.h1``;
+const P = styled.p``;
+const SPAN = styled.span``;
+const SECTION = styled.section``;
+const INPUT = styled.input``;
+const DIV = styled.div``;
 
 const UserCard = styled.div`
   display: flex;
   align-items: center;
   padding: 10px;
-
 `;
 
 const UserPhoto = styled.img`
@@ -68,7 +73,7 @@ const UserDate = styled.p`
   color: #888;
 `;
 
-const Users: React.FC = () => {
+const Users = () => {
   const dispatch: AppDispatch = useDispatch();
   const { users, status, error } = useSelector((state: RootState) => state.users as UsersState);
   const [searchQuery, setSearchQuery] = useState('');
@@ -84,17 +89,17 @@ const Users: React.FC = () => {
     // Filtro por nombre de usuario
     setFilteredUsers(
       users.filter(user => 
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        user.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [searchQuery, users]);
 
   if (status === promiseStatus.PENDING) {
-    return <p>Loading...</p>;
+    return <P>Loading...</P>;
   }
 
   if (status === promiseStatus.REJECTED) {
-    return <p>Error: {error}</p>;
+    return <P>Error: {error}</P>;
   }
 
   // Columnas de la tabla
@@ -109,43 +114,41 @@ const Users: React.FC = () => {
   // Datos de la tabla
   const tableData = filteredUsers.map((user: Users) => ({
     nameDetails: (
-      <div>
-        <UserCard>
-          <UserPhoto src={user.picture} alt={user.name} style={{ width: '50px', marginRight: '10px' }} />
-          <UserInfo>
-            <UserName>{user.name} </UserName> 
-            <UserID>ID: {user.id} </UserID>
-            <UserDate>{new Date(user.joined).toLocaleDateString()}</UserDate>
-          </UserInfo>
-        </UserCard>
-      </div>
+      <UserCard>
+        <UserPhoto src={user.picture || 'default-avatar.png'} alt={user.username} /> {/* Usa una imagen por defecto si picture está vacío */}
+        <UserInfo>
+          <UserName>{user.username}</UserName>
+          <UserID>ID: {user.id}</UserID>
+          <UserDate>{new Date(user.joined).toLocaleDateString()}</UserDate>
+        </UserInfo>
+      </UserCard>
     ),
     jobDesk: user['job-desk'],
-    schedule: user.schedule.join(', '),
+    schedule: user.schedule.join(', ') || 'No Schedule', // Maneja caso vacío
     contact: user.contact,
     status: (
-      <span style={{ color: user.status === 'Active' ? 'green' : 'red' }}>
+      <SPAN style={{ color: user.status === 'Active' ? 'green' : 'red' }}>
         {user.status}
-      </span>
+      </SPAN>
     ),
   }));
 
   return (
     <Container>
       <LateralMenu />
-      <div>
+      <DIV>
         <NavBar />
-        <section>
+        <SECTION>
           <Title>Employees</Title>
-          <input 
+          <INPUT 
             type="text" 
             placeholder="Search by name" 
             value={searchQuery} 
-            onChange={(e) => setSearchQuery(e.target.value)} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           />
           <Table cols={columns} data={tableData} />
-        </section>
-      </div>
+        </SECTION>
+      </DIV>
     </Container>
   );
 };

@@ -1,13 +1,24 @@
+//@ts-ignore
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// @ts-ignore
-import data from '../../components/json/data__users.json';
-
-const delay = (ms:number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getAllUsersThunk = createAsyncThunk(
   'users/getAll',
   async () => {
-    await delay(1500);
-    return data;
+    const response = await fetch(`${import.meta.env.VITE_API_URL}user`);
+    
+    const text = await response.text();
+    console.log('Raw response:', text);
+    
+    if(!response.ok) {
+      throw new Error('Error fetching users');
+    }
+    
+    try {
+      const data = JSON.parse(text); 
+      return data;
+    } catch (error) {
+      throw new Error('Invalid JSON response');
+    }
   }
 );
+
