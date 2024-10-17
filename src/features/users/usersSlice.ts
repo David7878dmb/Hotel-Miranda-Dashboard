@@ -1,24 +1,16 @@
+//@ts-ignore
 import { createSlice } from '@reduxjs/toolkit';
 // @ts-ignore
-import { getAllUsersThunk } from './usersThunk';
+import { getAllUsersThunk, User } from './usersThunk';
 // @ts-ignore
 import { changeStatus, pending, rejected, promiseStatus } from '../../utils/promises';
+import { PayloadAction } from '../../../node_modules/@reduxjs/toolkit/dist/index';
 
-interface Users {
-    id:number;
-    name:string;
-    picture:string;
-    joined:Date;
-    "job-desk":string;
-    schedule:string[];
-    contact:string;
-    status:string;
-}
 
-interface UsersState{
-    users:Users[];
-    status:string;
-    error: string | null;
+interface UsersState {
+  users: User[];
+  status: string;
+  error: string | null;
 }
 
 const initialState: UsersState = {
@@ -31,17 +23,22 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: (builder: any) => {
     builder
-      .addCase(getAllUsersThunk.pending, (state) => {
+      .addCase(getAllUsersThunk.pending, (state : any) => {
         pending(state);
       })
-      .addCase(getAllUsersThunk.fulfilled, (state, action) => {
+      .addCase(getAllUsersThunk.fulfilled, (state : any, action: PayloadAction<User[]>) => {
         changeStatus(state, promiseStatus.FULFILLED);
         state.users = action.payload;
       })
-      .addCase(getAllUsersThunk.rejected, (state, action) => {
+      .addCase(getAllUsersThunk.rejected, (state : any, action : any) => {
         rejected(state, action);
+        if (action.payload) {
+          state.error = action.payload;
+        } else {
+          state.error = action.error.message || 'An unknown error occurred';
+        }
       });
   }
 });

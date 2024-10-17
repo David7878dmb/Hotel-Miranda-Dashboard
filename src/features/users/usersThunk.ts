@@ -1,24 +1,31 @@
 //@ts-ignore
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { get } from "../../utils/errorApi";
 
-export const getAllUsersThunk = createAsyncThunk(
+
+export interface User {
+  id: number;
+  name: string;
+  picture: string;
+  joined: string;
+  "job-desk": string;
+  schedule: string[];
+  contact: string;
+  status: string;
+}
+
+export const getAllUsersThunk = createAsyncThunk<
+  User[],
+  void,
+  { rejectValue: string }
+>(
   'users/getAll',
-  async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}user`);
-    
-    const text = await response.text();
-    console.log('Raw response:', text);
-    
-    if(!response.ok) {
-      throw new Error('Error fetching users');
-    }
-    
+  async (_, { rejectWithValue }) => {
     try {
-      const data = JSON.parse(text); 
+      const data = await get<User[]>('user');
       return data;
     } catch (error) {
-      throw new Error('Invalid JSON response');
+      return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
     }
   }
 );
-

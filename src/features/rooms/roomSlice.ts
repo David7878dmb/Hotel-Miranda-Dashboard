@@ -34,7 +34,7 @@ const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: (builder: any) => {
     builder
       .addCase(getAllRoomsThunk.pending, (state) => {
         pending(state);
