@@ -145,14 +145,15 @@
               </tr>
             </thead>
             <tbody>
-              {currentRecords.map((row) => (
-                <tr key={row.id}>
+              {currentRecords.map((row, rowIndex) => (
+                <tr key={row.id || rowIndex}>
                   {cols.map((col, colIndex) => (
-                    <td key={colIndex}>{row[col.accessor]}</td>
+                    <td key={`${rowIndex}-${colIndex}`}>{row[col.accessor]}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
+
           </table>
         </TableWrapper>
   

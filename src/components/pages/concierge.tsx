@@ -14,13 +14,15 @@ import NavBar from "../navBar/navBar";
 //@ts-ignore
 import Table from "../tables/table";
 import { AppDispatch, RootState } from '../../app/store';
+//@ts-ignore
+import { Link } from 'react-router-dom';
 
 interface Users {
-    _id: string; // Cambiado a string para el id de MongoDB
+    _id: string; 
     id: number;
-    username: string; // Cambiado a username
+    username: string;
     picture: string;
-    joined: string; // Cambiado a string para facilitar la conversión a fecha
+    joined: string; 
     "job-desk": string;
     schedule: string[];
     contact: string;
@@ -115,16 +117,18 @@ const Users = () => {
   const tableData = filteredUsers.map((user: Users) => ({
     nameDetails: (
       <UserCard>
-        <UserPhoto src={user.picture || 'default-avatar.png'} alt={user.username} /> {/* Usa una imagen por defecto si picture está vacío */}
+        <UserPhoto src={user.picture || 'default-avatar.png'} alt={user.username} />
         <UserInfo>
-          <UserName>{user.username}</UserName>
-          <UserID>ID: {user.id}</UserID>
+          <Link to={`/users/${user._id}`}>
+            <UserName>{user.username}</UserName>
+          </Link>
+          <UserID>ID: {user._id}</UserID>
           <UserDate>{new Date(user.joined).toLocaleDateString()}</UserDate>
         </UserInfo>
       </UserCard>
     ),
     jobDesk: user['job-desk'],
-    schedule: user.schedule.join(', ') || 'No Schedule', // Maneja caso vacío
+    schedule: user.schedule.join(', ') || 'No Schedule',
     contact: user.contact,
     status: (
       <SPAN style={{ color: user.status === 'Active' ? 'green' : 'red' }}>

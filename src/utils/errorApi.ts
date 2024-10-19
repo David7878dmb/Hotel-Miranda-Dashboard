@@ -22,7 +22,7 @@ interface FetchOptions extends RequestInit {
       ...customHeaders,
     });
   
-    const url = new URL(`${import.meta.env.VITE_API_URL}${endpoint}`); // Corregido aquí
+    const url = new URL(`${import.meta.env.VITE_API_URL}${endpoint}`);
     if (params) {
       Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     }

@@ -6,6 +6,7 @@ import { Dashboard } from './pages/dashboard';
 import Contact from './pages/guest';
 import Users from './pages/concierge';
 import Login from './login/login';
+import {UserDetails} from './pages/UserDetails';
 import { AuthProvider, useAuth } from './login/authContext';
 import '../style/App.css';
 
@@ -23,6 +24,7 @@ function App() {
         <Route path='/dashboard' element={isAuthenticated ? <Dashboard /> : <Login />} />
         <Route path='/contact' element={isAuthenticated ? <Contact /> : <Login />} />
         <Route path='/users' element={isAuthenticated ? <Users /> : <Login />} />
+        <Route path='/users/:id' element={isAuthenticated ? <UserDetails /> : <Login />} />
       </Routes>
     </BrowserRouter>
   );
