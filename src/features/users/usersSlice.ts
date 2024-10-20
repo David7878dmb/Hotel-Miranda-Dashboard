@@ -1,28 +1,21 @@
 //@ts-ignore
-import { createSlice } from '@reduxjs/toolkit';
-// @ts-ignore
-import { getAllUsersThunk, getUserByIdThunk, User } from './usersThunk';
-// @ts-ignore
-import { changeStatus, pending, rejected, promiseStatus } from '../../utils/promises';
-import { PayloadAction } from '../../../node_modules/@reduxjs/toolkit/dist/index';
-
-interface UsersState {
-  users: User[];
-  currentUser: User | null;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+//@ts-ignore
+import { UsersState, User } from './usersTypes'; // Asegúrate de tener estos tipos en un archivo de tipos
+import { getAllUsersThunk, createUserThunk, updateUserThunk, deleteUserThunk } from './usersThunk';
 
 const initialState: UsersState = {
   users: [],
-  currentUser: null,
   status: 'idle',
   error: null,
 };
+
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    // Puedes agregar otros reducers aquí si es necesario
+  },
   extraReducers: (builder:any) => {
     builder
       .addCase(getAllUsersThunk.pending, (state:any) => {
@@ -32,22 +25,36 @@ const usersSlice = createSlice({
         state.status = 'succeeded';
         state.users = action.payload;
       })
-      .addCase(getAllUsersThunk.rejected, (state:any, action:any) => {
+      .addCase(getAllUsersThunk.rejected, (state:any, action: PayloadAction<string | null>) => {
         state.status = 'failed';
-        state.error = action.payload ?? 'Failed to fetch users';
+        state.error = action.payload;
       })
-      .addCase(getUserByIdThunk.pending, (state:any) => {
-        state.status = 'loading';
-        state.currentUser = null;
+
+      // Create User Thunk
+      .addCase(createUserThunk.fulfilled, (state:any, action: PayloadAction<User>) => {
+        state.users.push(action.payload);
       })
-      .addCase(getUserByIdThunk.fulfilled, (state:any, action: PayloadAction<User>) => {
-        state.status = 'succeeded';
-        state.currentUser = action.payload;
+      .addCase(createUserThunk.rejected, (state:any, action: PayloadAction<string | null>) => {
+        state.error = action.payload;
       })
-      .addCase(getUserByIdThunk.rejected, (state:any, action:any) => {
-        state.status = 'failed';
-        state.error = action.payload ?? 'Failed to fetch user';
-        state.currentUser = null;
+
+      // Update User Thunk
+      .addCase(updateUserThunk.fulfilled, (state:any, action: PayloadAction<User>) => {
+        const index = state.users.findIndex((user: User) => user._id === action.payload._id);
+        if (index !== -1) {
+          state.users[index] = action.payload;
+        }
+      })
+      .addCase(updateUserThunk.rejected, (state:any, action: PayloadAction<string | null>) => {
+        state.error = action.payload;
+      })
+
+      // Delete User Thunk
+      .addCase(deleteUserThunk.fulfilled, (state:any, action: PayloadAction<string>) => {
+        state.users = state.users.filter((user: User) => user._id !== action.payload);
+      })
+      .addCase(deleteUserThunk.rejected, (state:any, action: PayloadAction<string | null>) => {
+        state.error = action.payload;
       });
   },
 });

@@ -1,6 +1,6 @@
 //@ts-ignore
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { get } from "../../utils/errorApi";
+import { get, post, put, del } from "../../utils/errorApi";
 
 export interface User {
   id: string;  // Cambiado a string para manejar ObjectId
@@ -44,6 +44,54 @@ export const getUserByIdThunk = createAsyncThunk<
       return data;
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+    }
+  }
+);
+
+export const createUserThunk = createAsyncThunk<
+  User,
+  Partial<User>,
+  { rejectValue: string }
+>(
+  'users/create',
+  async (newUser, { rejectWithValue }) => {
+    try {
+      const data = await post<User>('user', newUser);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to create user');
+    }
+  }
+);
+
+export const updateUserThunk = createAsyncThunk<
+  User,
+  { id: string; updates: Partial<User> },
+  { rejectValue: string }
+>(
+  'users/update',
+  async ({ id, updates }, { rejectWithValue }) => {
+    try {
+      const data = await put<User>(`user/${id}`, updates);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to update user');
+    }
+  }
+);
+
+export const deleteUserThunk = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>(
+  'users/delete',
+  async (id, { rejectWithValue }) => {
+    try {
+      await del(`user/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to delete user');
     }
   }
 );

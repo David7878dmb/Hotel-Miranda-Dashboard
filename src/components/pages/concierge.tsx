@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsersThunk } from '../../features/users/usersThunk';
+import { createUserThunk, deleteUserThunk, getAllUsersThunk, updateUserThunk } from '../../features/users/usersThunk';
 //@ts-ignore
 import { promiseStatus } from '../../utils/promises';
 //@ts-ignore
@@ -41,6 +41,12 @@ const SPAN = styled.span``;
 const SECTION = styled.section``;
 const INPUT = styled.input``;
 const DIV = styled.div``;
+const Button = styled.button`
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+`;
 
 const UserCard = styled.div`
   display: flex;
@@ -75,6 +81,7 @@ const UserDate = styled.p`
   color: #888;
 `;
 
+
 const Users = () => {
   const dispatch: AppDispatch = useDispatch();
   const { users, status, error } = useSelector((state: RootState) => state.users as UsersState);
@@ -88,13 +95,38 @@ const Users = () => {
   }, [dispatch, status]);
 
   useEffect(() => {
-    // Filtro por nombre de usuario
     setFilteredUsers(
-      users.filter(user => 
+      users.filter((user) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [searchQuery, users]);
+
+  const handleDeleteUser = (id: string) => {
+    dispatch(deleteUserThunk(id));
+  };
+
+  const handleUpdateUser = (id: string) => {
+    const updatedUser = {
+      // Aquí puedes agregar lógica para actualizar un usuario.
+      username: 'Updated Username',
+      contact: 'New Contact',
+    };
+    dispatch(updateUserThunk({ id, updatedUser }));
+  };
+
+  const handleCreateUser = () => {
+    const newUser = {
+      username: 'New User',
+      picture: 'default-avatar.png',
+      joined: new Date().toISOString(),
+      'job-desk': 'New Job',
+      schedule: ['Monday', 'Tuesday'],
+      contact: '123456789',
+      status: 'Active',
+    };
+    dispatch(createUserThunk(newUser));
+  };
 
   if (status === promiseStatus.PENDING) {
     return <P>Loading...</P>;
@@ -104,16 +136,15 @@ const Users = () => {
     return <P>Error: {error}</P>;
   }
 
-  // Columnas de la tabla
   const columns = [
     { header: 'Name', accessor: 'nameDetails' },
     { header: 'Job Desk', accessor: 'jobDesk' },
     { header: 'Schedule', accessor: 'schedule' },
     { header: 'Contact', accessor: 'contact' },
     { header: 'Status', accessor: 'status' },
+    { header: 'Actions', accessor: 'actions' },
   ];
 
-  // Datos de la tabla
   const tableData = filteredUsers.map((user: Users) => ({
     nameDetails: (
       <UserCard>
@@ -135,6 +166,12 @@ const Users = () => {
         {user.status}
       </SPAN>
     ),
+    actions: (
+      <DIV>
+        <Button onClick={() => handleUpdateUser(user._id)}>Update</Button>
+        <Button onClick={() => handleDeleteUser(user._id)}>Delete</Button>
+      </DIV>
+    ),
   }));
 
   return (
@@ -144,11 +181,14 @@ const Users = () => {
         <NavBar />
         <SECTION>
           <Title>Employees</Title>
-          <INPUT 
-            type="text" 
-            placeholder="Search by name" 
-            value={searchQuery} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+          <Button onClick={handleCreateUser}>Create New User</Button>
+          <INPUT
+            type="text"
+            placeholder="Search by name"
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
           />
           <Table cols={columns} data={tableData} />
         </SECTION>
