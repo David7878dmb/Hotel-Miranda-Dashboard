@@ -24,7 +24,7 @@ interface Users {
     picture: string;
     joined: string; 
     "job-desk": string;
-    schedule: string[];
+    schedule: string[] | string;
     contact: string;
     status: string;
 }
@@ -81,10 +81,9 @@ const UserDate = styled.p`
   color: #888;
 `;
 
-
 const Users = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { users, status, error } = useSelector((state: RootState) => state.users as UsersState);
+  const { users, status, error } = useSelector((state: RootState) => state.users);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState<Users[]>([]);
 
@@ -96,7 +95,7 @@ const Users = () => {
 
   useEffect(() => {
     setFilteredUsers(
-      users.filter((user) =>
+      users.filter((user: any) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
@@ -108,11 +107,10 @@ const Users = () => {
 
   const handleUpdateUser = (id: string) => {
     const updatedUser = {
-      // Aquí puedes agregar lógica para actualizar un usuario.
       username: 'Updated Username',
       contact: 'New Contact',
     };
-    dispatch(updateUserThunk({ id, updatedUser }));
+    dispatch(updateUserThunk({ id, updates: updatedUser }));
   };
 
   const handleCreateUser = () => {
@@ -145,7 +143,7 @@ const Users = () => {
     { header: 'Actions', accessor: 'actions' },
   ];
 
-  const tableData = filteredUsers.map((user: Users) => ({
+  const tableData = filteredUsers.map((user) => ({
     nameDetails: (
       <UserCard>
         <UserPhoto src={user.picture || 'default-avatar.png'} alt={user.username} />
@@ -159,7 +157,7 @@ const Users = () => {
       </UserCard>
     ),
     jobDesk: user['job-desk'],
-    schedule: user.schedule.join(', ') || 'No Schedule',
+    schedule: Array.isArray(user.schedule) ? user.schedule.join(', ') : 'No Schedule',
     contact: user.contact,
     status: (
       <SPAN style={{ color: user.status === 'Active' ? 'green' : 'red' }}>

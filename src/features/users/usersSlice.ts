@@ -1,7 +1,7 @@
 //@ts-ignore
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 //@ts-ignore
-import { UsersState, User } from './usersTypes'; // Asegúrate de tener estos tipos en un archivo de tipos
+import { UsersState, User } from './usersTypes'; 
 import { getAllUsersThunk, createUserThunk, updateUserThunk, deleteUserThunk } from './usersThunk';
 
 const initialState: UsersState = {
@@ -14,7 +14,7 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    // Puedes agregar otros reducers aquí si es necesario
+   
   },
   extraReducers: (builder:any) => {
     builder
@@ -25,9 +25,9 @@ const usersSlice = createSlice({
         state.status = 'succeeded';
         state.users = action.payload;
       })
-      .addCase(getAllUsersThunk.rejected, (state:any, action: PayloadAction<string | null>) => {
+      .addCase(getAllUsersThunk.rejected, (state:any, action:any) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.error.message || 'Failed to fetch users';
       })
 
       // Create User Thunk
@@ -40,7 +40,7 @@ const usersSlice = createSlice({
 
       // Update User Thunk
       .addCase(updateUserThunk.fulfilled, (state:any, action: PayloadAction<User>) => {
-        const index = state.users.findIndex((user: User) => user._id === action.payload._id);
+        const index = state.users.findIndex((user: User) => user.id === action.payload._id);
         if (index !== -1) {
           state.users[index] = action.payload;
         }
@@ -51,7 +51,7 @@ const usersSlice = createSlice({
 
       // Delete User Thunk
       .addCase(deleteUserThunk.fulfilled, (state:any, action: PayloadAction<string>) => {
-        state.users = state.users.filter((user: User) => user._id !== action.payload);
+        state.users = state.users.filter((user: User) => user.id !== action.payload);
       })
       .addCase(deleteUserThunk.rejected, (state:any, action: PayloadAction<string | null>) => {
         state.error = action.payload;

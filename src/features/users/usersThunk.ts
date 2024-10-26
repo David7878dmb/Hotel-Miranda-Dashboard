@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { get, post, put, del } from "../../utils/errorApi";
 
 export interface User {
-  id: string;  // Cambiado a string para manejar ObjectId
+  id: string;  
   name: string;
   picture: string;
   joined: string;
@@ -29,16 +29,9 @@ export const getAllUsersThunk = createAsyncThunk<
   }
 );
 
-export const getUserByIdThunk = createAsyncThunk<
-  User,
-  string,  // Cambiado a string para manejar ObjectId
-  { rejectValue: string }
->(
+export const getUserByIdThunk = createAsyncThunk<User, string, { rejectValue: string }>(
   'users/getById',
   async (id, { rejectWithValue }) => {
-    if (!id) {
-      return rejectWithValue('Invalid user ID');
-    }
     try {
       const data = await get<User>(`user/${id}`);
       return data;
@@ -48,11 +41,7 @@ export const getUserByIdThunk = createAsyncThunk<
   }
 );
 
-export const createUserThunk = createAsyncThunk<
-  User,
-  Partial<User>,
-  { rejectValue: string }
->(
+export const createUserThunk = createAsyncThunk<User, Partial<User>, { rejectValue: string }>(
   'users/create',
   async (newUser, { rejectWithValue }) => {
     try {
@@ -64,11 +53,7 @@ export const createUserThunk = createAsyncThunk<
   }
 );
 
-export const updateUserThunk = createAsyncThunk<
-  User,
-  { id: string; updates: Partial<User> },
-  { rejectValue: string }
->(
+export const updateUserThunk = createAsyncThunk<User, { id: string; updates: Partial<User> }, { rejectValue: string }>(
   'users/update',
   async ({ id, updates }, { rejectWithValue }) => {
     try {
@@ -80,11 +65,7 @@ export const updateUserThunk = createAsyncThunk<
   }
 );
 
-export const deleteUserThunk = createAsyncThunk<
-  string,
-  string,
-  { rejectValue: string }
->(
+export const deleteUserThunk = createAsyncThunk<string, string, { rejectValue: string }>(
   'users/delete',
   async (id, { rejectWithValue }) => {
     try {
