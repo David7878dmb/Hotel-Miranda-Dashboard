@@ -41,6 +41,8 @@ const SPAN = styled.span``;
 const SECTION = styled.section``;
 const INPUT = styled.input``;
 const DIV = styled.div``;
+const SELECT = styled.select``;
+const OPTIONS = styled.option``;
 const Button = styled.button`
   margin: 5px;
   padding: 8px 12px;
@@ -80,12 +82,33 @@ const UserDate = styled.p`
   font-size: 0.8rem;
   color: #888;
 `;
+const FormContainer = styled.div`
+  margin-top: 10px;
+  display: ${(props: { visible: boolean }) => (props.visible ? 'block' : 'none')};
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+`;
 
 const Users = () => {
   const dispatch: AppDispatch = useDispatch();
   const { users, status, error } = useSelector((state: RootState) => state.users);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState<Users[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newUserData, setNewUserData] = useState({
+    username: '',
+    password: '',
+    picture: '',
+    position: '',
+    email: '',
+    joined: new Date().toISOString(),
+    jobDesk: '',
+    schedule: '',
+    contact: '',
+    status: 'ACTIVE',
+  });
 
   useEffect(() => {
     if (status === promiseStatus.IDLE) {
@@ -114,16 +137,13 @@ const Users = () => {
   };
 
   const handleCreateUser = () => {
-    const newUser = {
-      username: 'New User',
-      picture: 'default-avatar.png',
-      joined: new Date().toISOString(),
-      'job-desk': 'New Job',
-      schedule: ['Monday', 'Tuesday'],
-      contact: '123456789',
-      status: 'Active',
-    };
-    dispatch(createUserThunk(newUser));
+    dispatch(createUserThunk(newUserData));
+    setShowForm(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewUserData({ ...newUserData, [name]: value });
   };
 
   if (status === promiseStatus.PENDING) {
@@ -179,7 +199,76 @@ const Users = () => {
         <NavBar />
         <SECTION>
           <Title>Employees</Title>
-          <Button onClick={handleCreateUser}>Create New User</Button>
+          <Button onClick={() => setShowForm(!showForm)}>Create New User</Button>
+          <FormContainer visible={showForm}>
+            <INPUT
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={newUserData.username}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={newUserData.password}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={newUserData.email}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="text"
+              name="picture"
+              placeholder="Picture URL"
+              value={newUserData.picture}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="text"
+              name="position"
+              placeholder="Position"
+              value={newUserData.position}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="text"
+              name="jobDesk"
+              placeholder="Job Desk"
+              value={newUserData.jobDesk}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="text"
+              name="schedule"
+              placeholder="Schedule (comma-separated)"
+              value={newUserData.schedule}
+              onChange={handleInputChange}
+            />
+            <INPUT
+              type="text"
+              name="contact"
+              placeholder="Contact"
+              value={newUserData.contact}
+              onChange={handleInputChange}
+            />
+            <SELECT
+              name="status"
+              value={newUserData.status}
+              onChange={(e:any) =>
+                setNewUserData({ ...newUserData, status: e.target.value })
+              }
+            >
+              <OPTIONS value="ACTIVE">ACTIVE</OPTIONS>
+              <OPTIONS value="INACTIVE">INACTIVE</OPTIONS>
+            </SELECT>
+            <Button onClick={handleCreateUser}>Save</Button>
+          </FormContainer>
           <INPUT
             type="text"
             placeholder="Search by name"
